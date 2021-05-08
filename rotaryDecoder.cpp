@@ -56,6 +56,7 @@ bool rotaryDecoder::isConnected()
 void rotaryDecoder::readInitialState()
 {
   uint8_t val = _read8();
+  _lastVal = val;
   for (uint8_t i = 0; i < _cnt; i++)
   {
     _lastPos[i] = val & 0x03;
@@ -67,42 +68,74 @@ void rotaryDecoder::readInitialState()
 bool rotaryDecoder::checkChange()
 {
   uint8_t val = _read8();
-  for (uint8_t i = 0; i < _cnt; i++, val >>= 2)
-  {
-    if (_lastPos[i] != (val & 0x03)) return true;
-  }
-  return false;
+  return (_lastVal != val);
 }
 
 
-void rotaryDecoder::update()
+bool rotaryDecoder::update()
 {
   uint8_t val = _read8();
-
+  if (_lastVal != val) return false;
+ _lastVal = val;
   for (uint8_t i = 0; i < _cnt; i++, val >>= 2)
   {
     uint8_t currentpos = (val & 0x03);
-    if (_lastPos[i] != currentpos)        // moved!
+    uint8_t change = (_lastPos[i] << 2) | currentpos;
+    switch (change)
     {
-      uint8_t change = (_lastPos[i] << 2) | currentpos;
-      switch (change)
-      {
-        case 0b0001:  // fall through..
-        case 0b0111:
-        case 0b1110:
-        case 0b1000:
-          _RE[i]++;
-          break;
-        case 0b0010:
-        case 0b0100:
-        case 0b1101:
-        case 0b1011:
-          _RE[i]--;
-          break;
-      }
-      _lastPos[i] = currentpos;
+      case 0b0001:  // fall through..
+      case 0b0111:
+      case 0b1110:
+      case 0b1000:
+        _encoder[i]++;
+        break;
+      case 0b0010:
+      case 0b0100:
+      case 0b1101:
+      case 0b1011:
+        _encoder[i]--;
+        break;
     }
+    _lastPos[i] = currentpos;
   }
+  return true;
+}
+
+
+bool rotaryDecoder::updateSingle()
+{
+  uint8_t val = _read8();
+  if (_lastVal != val) return false;
+ _lastVal = val;
+ 
+  for (uint8_t i = 0; i < _cnt; i++, val >>= 2)
+  {
+    uint8_t currentpos = (val & 0x03);
+    uint8_t change = (_lastPos[i] << 2) | currentpos;
+    switch (change)
+    {
+      case 0b0001:  // fall through..
+      case 0b0111:
+      case 0b1110:
+      case 0b1000:
+        _encoder[i] += 1;
+        break;
+      case 0b0011:
+      case 0b0110:
+      case 0b1001:
+      case 0b1100:
+        _encoder[i] += 2;
+        break;
+      case 0b0010:
+      case 0b0100:
+      case 0b1101:
+      case 0b1011:
+        _encoder[i] += 3;
+        break;
+    }
+    _lastPos[i] = currentpos;
+  }
+  return true;
 }
 
 

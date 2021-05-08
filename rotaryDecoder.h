@@ -20,28 +20,34 @@ public:
   explicit rotaryDecoder(const int8_t address, TwoWire *wire = &Wire);
 
 #if defined (ESP8266) || defined(ESP32)
-  bool begin(uint8_t sda, uint8_t scl, uint8_t cnt = 4);
+  bool    begin(uint8_t sda, uint8_t scl, uint8_t cnt = 4);
 #endif
 
-  bool begin(uint8_t cnt = 4);
-  bool isConnected();
+  bool    begin(uint8_t cnt = 4);
+  bool    isConnected();
 
-  void readInitialState();
+  void    readInitialState();
 
-  // polling version
-  bool checkChange();
-  void update();
+  // for polling version, 
+  // checkChange is bit faster than a call to update
+  // so usefull if there are only a few updates 
+  bool    checkChange();
 
-  uint32_t getValue(uint8_t re) { return _RE[re]; };
-  void     setValue(uint8_t re, uint32_t val = 0) { _RE[re] = val; };
+  // read and update the counters
+  bool    update();         // assumes two directions   => +1 and -1
+  bool    updateSingle();   // assumes single direction => + ++ +++ 
+
+  int32_t getValue(uint8_t re) { return _encoder[re]; };
+  void    setValue(uint8_t re, int32_t val = 0) { _encoder[re] = val; };
 
   // DEBUG
-  uint32_t getLastPosition(uint8_t re) { return _lastPos[re]; };
+  uint8_t getLastPosition(uint8_t re) { return _lastPos[re]; };
 
 private:
   uint8_t   _cnt = 0;
+  uint8_t   _lastVal = 0;
   uint8_t   _lastPos[4] = { 0,0,0,0 };
-  uint32_t  _RE[4] = { 0,0,0,0 };
+  int32_t   _encoder[4] = { 0,0,0,0 };
 
   uint8_t   _read8();
   uint8_t   _address;
