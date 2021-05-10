@@ -75,7 +75,7 @@ bool rotaryDecoder::checkChange()
 bool rotaryDecoder::update()
 {
   uint8_t val = _read8();
-  if (_lastVal != val) return false;
+  if (_lastVal == val) return false;
  _lastVal = val;
   for (uint8_t i = 0; i < _cnt; i++, val >>= 2)
   {
@@ -105,7 +105,7 @@ bool rotaryDecoder::update()
 bool rotaryDecoder::updateSingle()
 {
   uint8_t val = _read8();
-  if (_lastVal != val) return false;
+  if (_lastVal == val) return false;
  _lastVal = val;
  
   for (uint8_t i = 0; i < _cnt; i++, val >>= 2)
@@ -141,7 +141,6 @@ bool rotaryDecoder::updateSingle()
 
 uint8_t rotaryDecoder::_read8()
 {
-  // todo error handling;
   _wire->requestFrom(_address, (uint8_t)1);
   return _wire->read();
 }
