@@ -188,9 +188,9 @@ uint8_t rotaryDecoder::_read8()
 
 bool rotaryDecoder::_write8(uint8_t value)
 {
-  _wire->beginTransmission(address);
+  _wire->beginTransmission(_address);
   _wire->write(value);
-  return (_wire->endTransmission == 0);
+  return (_wire->endTransmission() == 0);
 }
 
 

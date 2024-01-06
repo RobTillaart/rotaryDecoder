@@ -54,6 +54,7 @@ protected:
   int32_t   _encoder[4] = { 0, 0, 0, 0 };
 
   uint8_t   _read8();
+  bool      _write8(uint8_t value);
   uint8_t   _address;
   TwoWire * _wire;
 };
