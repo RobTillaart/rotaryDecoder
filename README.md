@@ -82,6 +82,13 @@ Returns HIGH or LOW.
 - **bool write1(uint8_t pin, uint8_t value)** writes a single pin (0..7).
 Value should be LOW (0) or HIGH (other values).
 
+----
+
+**Note to myself:
+If the write1() interferes, 
+There must be a mask set to define Input/Output.**
+
+----
 
 #### Debugging
 
