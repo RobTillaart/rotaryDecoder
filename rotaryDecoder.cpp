@@ -1,7 +1,7 @@
 //
 //    FILE: rotaryDecoder.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.2.1
+// VERSION: 0.3.0
 //    DATE: 2021-05-08
 // PURPOSE: rotary decoder library for Arduino
 //     URL: https://github.com/RobTillaart/rotaryDecoder
@@ -143,19 +143,54 @@ void rotaryDecoder::setValue(uint8_t re, int32_t value)
 }
 
 
+/////////////////////////////////////////////////////
+//
+//  READ - WRITE interface
+//
+uint8_t rotaryDecoder::read1(uint8_t pin)
+{
+  uint8_t mask = 1 << pin;
+  uint8_t tmp = _read8();
+  return (tmp & mask) > 0 ? HIGH : LOW;
+}
+
+
+bool rotaryDecoder::write1(uint8_t pin, uint8_t value)
+{
+  uint8_t mask = 1 << pin;
+  uint8_t tmp = _read8();
+  if (value == LOW) tmp &= ~mask;
+  else tmp |= mask;
+  bool _write8(tmp);
+}
+
+
+/////////////////////////////////////////////////////
+//
+//  DEBUG
+//
 uint8_t rotaryDecoder::getLastPosition(uint8_t re)
 {
   return _lastPos[re];
 };
 
+
 /////////////////////////////////////////////////////
 //
-//  PRIVATE
+//  PROTECTED
 //
 uint8_t rotaryDecoder::_read8()
 {
   _wire->requestFrom(_address, (uint8_t)1);
   return _wire->read();
+}
+
+
+bool rotaryDecoder::_write8(uint8_t value)
+{
+  _wire->beginTransmission(address);
+  _wire->write(value);
+  return (_wire->endTransmission == 0);
 }
 
 

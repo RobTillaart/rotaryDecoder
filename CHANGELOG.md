@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.3.0] - 2024-01-06
+- add **read1(pin)** experimental #10
+- add **write1(pin, value)**  experimental #10
+- update readme.md
+
+----
+
 ## [0.2.1] - 2024-01-06
 - Fix URL in examples
 - minor edits

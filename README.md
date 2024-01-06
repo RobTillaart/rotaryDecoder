@@ -66,6 +66,23 @@ only goes into a single direction.
 default 0
 
 
+#### Read1 - Write1 - experimental
+
+Warning the **write1(pin, value)** might alter the state of the rotaryDecoder pins.
+So this one should be tested thoroughly.
+See #10, **not tested, experimental** to be tested, feedback welcome.
+
+
+**Read1()** and **write1()** are functions to access the pins of the PCF8574 that 
+are not used for rotaryDecoder's.
+The user must guard that the pins do not interfere with the rotary encoder pins
+
+- **uint8_t read1(uint8_t pin)** reads a single pin (0..7).
+Returns HIGH or LOW.
+- **bool write1(uint8_t pin, uint8_t value)** writes a single pin (0..7).
+Value should be LOW (0) or HIGH (other values).
+
+
 #### Debugging
 
 - **int8_t getLastPosition(uint8_r re)** returns last position.
@@ -102,11 +119,6 @@ At a 50% update percentage this implies a max of about
 
 Note that a high speed drill goes up to 30000 RPM = 500 RPS = 2000 interrupts per second, 
 assuming 4 pulses == 360°. (not tested)
-
-
-## Operational
-
-See examples..
 
 
 ## Future
