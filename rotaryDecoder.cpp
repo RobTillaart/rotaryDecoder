@@ -161,7 +161,7 @@ bool rotaryDecoder::write1(uint8_t pin, uint8_t value)
   uint8_t tmp = _read8();
   if (value == LOW) tmp &= ~mask;
   else tmp |= mask;
-  bool _write8(tmp);
+  return _write8(tmp);
 }
 
 
