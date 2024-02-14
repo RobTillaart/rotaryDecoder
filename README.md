@@ -68,27 +68,25 @@ default 0
 
 #### Read1 - Write1 - experimental
 
-Warning the **write1(pin, value)** might alter the state of the rotaryDecoder pins.
-So this one should be tested thoroughly.
-See #10, **not tested, experimental** to be tested, feedback welcome.
+Warning the **write1(pin, value)** might alter the state of the rotary encoder pins.
+So this functionality should be tested thoroughly for your application.
+Especially the **write()** is **experimental**, see issue #10, feedback welcome.
 
 
 **Read1()** and **write1()** are functions to access the pins of the PCF8574 that 
-are not used for rotaryDecoder's.
-The user must guard that the pins do not interfere with the rotary encoder pins
+are not used for rotary encoders.
+The user must guard that especially writing the pins do not interfere with the rotary encoder pins.
 
 - **uint8_t read1(uint8_t pin)** reads a single pin (0..7).
 Returns HIGH or LOW.
 - **bool write1(uint8_t pin, uint8_t value)** writes a single pin (0..7).
 Value should be LOW (0) or HIGH (other values).
+- **uint8_t read8()** read all pins in one I2C IO action. When one need to access multiple 
+input pins this is faster but need some bit masking.
+- **bool write8(uint8_t value)** writes to multiple pins at once, e.g. to control multiple
+LEDs in one IO action. As said before the user must guard not to interfere with the
+rotary encoder pins.
 
-----
-
-**Note to myself:
-If the write1() interferes, 
-There must be a mask set to define Input/Output.**
-
-----
 
 #### Debugging
 

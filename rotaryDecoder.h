@@ -11,7 +11,7 @@
 #include "Arduino.h"
 #include "Wire.h"
 
-#define ROTARY_DECODER_LIB_VERSION         (F("0.2.1"))
+#define ROTARY_DECODER_LIB_VERSION         (F("0.3.0"))
 
 
 class rotaryDecoder
@@ -41,6 +41,8 @@ public:
   //  READ - WRITE interface
   uint8_t read1(uint8_t pin);
   bool    write1(uint8_t pin, uint8_t value);
+  uint8_t read8();
+  bool    write8(uint8_t value);
 
 
   //  DEBUG
@@ -53,8 +55,6 @@ protected:
   uint8_t   _lastPos[4] = { 0, 0, 0, 0 };
   int32_t   _encoder[4] = { 0, 0, 0, 0 };
 
-  uint8_t   _read8();
-  bool      _write8(uint8_t value);
   uint8_t   _address;
   TwoWire * _wire;
 };

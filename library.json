@@ -1,7 +1,7 @@
 {
   "name": "rotaryDecoder",
   "keywords": "rotary,encoder,PCF8574",
-  "description": "Arduino library to rotary decoder with a PCF8574\nSupports up to 4 RE's",
+  "description": "Arduino library to rotary decoder with a PCF8574\nSupports up to 4 rotary encoders.",
   "authors":
   [
     {
