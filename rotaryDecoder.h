@@ -4,7 +4,7 @@
 //  AUTHOR: Rob Tillaart
 // VERSION: 0.3.0
 //    DATE: 2021-05-08
-// PURPOSE: rotary decoder library for Arduino
+// PURPOSE: Arduino library for rotary decoder
 //     URL: https://github.com/RobTillaart/rotaryDecoder
 
 

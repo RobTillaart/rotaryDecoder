@@ -51,19 +51,20 @@ Returns true if the PCF8574 is on the I2C bus.
 - **void readInitialState()** read the initial state of the 4 rotary encoders. 
 Typically called in setup only, or after a sleep e.g. in combination with **setValue()**
 - **bool checkChange()** polling to see if one or more RE have changed, 
-without updating the counters.
+without updating the internal counters.
 - **void update()** update the internal counters of the RE. 
-These will add +1 or -1 depending on direction. 
+The counters will add +1 or -1 depending on rotation direction. 
+Need to be called before **getValue()** or before **getKeyPressed()**. 
+Note that **update()** must be called as soon as possible after the interrupt occurs (or as often as possible when polling).
 - **void updateSingle()** update the internal counters of the RE. 
-This will add +1 +2 or +3  as it assumes that the rotary encoder 
+This will add +1 +2 or +3 as it assumes that the rotary encoder 
 only goes into a single direction. 
 
 
 #### Counters
 
 - **uint32_t getValue(uint8_r re)** returns the RE counter.
-- **void setValue(uint8_r re, uint32_t value = 0)** (re)set the internal counter to value, 
-default 0
+- **void setValue(uint8_r re, uint32_t value = 0)** (re)set the internal counter to value, default 0
 
 
 #### Read1 - Write1 - experimental
@@ -90,19 +91,19 @@ rotary encoder pins.
 
 #### Debugging
 
-- **int8_t getLastPosition(uint8_r re)** returns last position.
+- **int8_t getLastPosition(uint8_r re)** Returns last position.
 
 
 ## Performance
 
 As the decoder is based upon a PCF8574, a I2C device, the performance is affected by the 
-clock speed of the I2C bus. All four core functions have one call to **\_read8()** which 
-is the most expensive part.
+clock speed of the I2C bus.
+All four core functions have one call to **\read8()** which is the most expensive part.
 
 Early tests gave the following indicative times (Arduino UNO) for the **update()** 
 function (with no updates it is ~8 us faster). 
-Note that above 500 KHz the gain becomes less while reliability of signal decreases. 
-(500 KHz is about ~3x faster than 100 KHz in practice.)
+Note that above 500 KHz the gain becomes less while reliability of signal decreases.
+(500 KHz is about 3x faster than 100 KHz in practice.)
 As 400 KHz is a standard I2C clock speed it is the preferred one.
 
 
@@ -117,9 +118,9 @@ As 400 KHz is a standard I2C clock speed it is the preferred one.
 |   700 KHz   |       73    |     6   |   8%  |
 
 
-At @400KHz it can update 4 rotary encoders in ~100us. 
+At 400 KHz it can update 4 rotary encoders in ~100us. 
 At a 50% update percentage this implies a max of about 
-5000 **update()** calls per second in theory 
+5000 **update()** calls per second in theory.
 **to be tested in practice**
 
 Note that a high speed drill goes up to 30000 RPM = 500 RPS = 2000 interrupts per second, 
