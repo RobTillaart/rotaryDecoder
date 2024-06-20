@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.3.1] - 2024-06-20
+-
+- add example **rotaryDecoder_demo_RE_IO.ino**
+- update readme.md, interface section.
+- minor edits
+
 ## [0.3.0] - 2024-02-14
-- Fix #10
+- Fix #10, add read and write for free IO pins.
 - add **read1(pin)**
 - add **write1(pin, value)** experimental see #10
 - made **read8()** and **write8()** public for faster multi pin access

@@ -39,7 +39,7 @@ pins to GND so you will not get unintended interrupts.
 
 #### Constructor
 
-- **rotaryDecoder(const int8_t address, TwoWire \*wire = Wire);**
+- **rotaryDecoder(const int8_t address, TwoWire \*wire = Wire)**
 - **bool begin(uint8_t count = 4)** UNO ea. initializes the class. 
 count is the number of rotary encoders connected. (Max 4 per PCF8574)
 Returns true if the PCF8574 is on the I2C bus.
@@ -52,19 +52,22 @@ Returns true if the PCF8574 is on the I2C bus.
 Typically called in setup only, or after a sleep e.g. in combination with **setValue()**
 - **bool checkChange()** polling to see if one or more RE have changed, 
 without updating the internal counters.
-- **void update()** update the internal counters of the RE. 
+- **bool update()** update the internal counters of the RE. 
 The counters will add +1 or -1 depending on rotation direction. 
 Need to be called before **getValue()** or before **getKeyPressed()**. 
-Note that **update()** must be called as soon as possible after the interrupt occurs (or as often as possible when polling).
-- **void updateSingle()** update the internal counters of the RE. 
+Note that **update()** must be called as soon as possible after the interrupt occurs 
+or as often as possible when polling.  
+Returns false if there is no change since last read.
+- **bool updateSingle()** update the internal counters of the RE. 
 This will add +1 +2 or +3 as it assumes that the rotary encoder 
-only goes into a single direction. 
+only goes into a single direction.  
+Returns false if there is no change since last read.
 
 
 #### Counters
 
-- **uint32_t getValue(uint8_r re)** returns the RE counter.
-- **void setValue(uint8_r re, uint32_t value = 0)** (re)set the internal counter to value, default 0
+- **int32_t getValue(uint8_r re)** returns the RE counter.
+- **void setValue(uint8_r re, int32_t value = 0)** (re)set the internal counter to value, default 0
 
 
 #### Read1 - Write1 - experimental
@@ -98,7 +101,7 @@ rotary encoder pins.
 
 As the decoder is based upon a PCF8574, a I2C device, the performance is affected by the 
 clock speed of the I2C bus.
-All four core functions have one call to **\read8()** which is the most expensive part.
+All four core functions have one call to **read8()** which is the most expensive part.
 
 Early tests gave the following indicative times (Arduino UNO) for the **update()** 
 function (with no updates it is ~8 us faster). 
