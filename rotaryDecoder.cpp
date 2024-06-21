@@ -47,7 +47,7 @@ uint8_t rotaryDecoder::readInitialState()
     _lastPos[i] = value & 0x03;
     value >>= 2;
   }
-  return value;
+  return _lastValue;
 }
 
 
