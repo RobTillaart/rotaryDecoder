@@ -40,6 +40,7 @@ pins to GND so you will not get unintended interrupts.
 #### Constructor
 
 - **rotaryDecoder(const int8_t address, TwoWire \*wire = Wire)**
+constructor to set the address and optional the Wire bus.
 - **bool begin(uint8_t count = 4)** UNO ea. initializes the class. 
 count is the number of rotary encoders connected. (Max 4 per PCF8574)
 Returns true if the PCF8574 is on the I2C bus.
