@@ -1,7 +1,7 @@
 //
 //    FILE: rotaryDecoder.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.4.1
+// VERSION: 0.4.2
 //    DATE: 2021-05-08
 // PURPOSE: Arduino library for a PCF8574 based rotary decoder
 //     URL: https://github.com/RobTillaart/rotaryDecoder
@@ -54,6 +54,14 @@ void rotaryDecoder::reset()
   _lastValue = 0;
 }
 
+/*
+void rotaryDecoder::reset(uint8_t re)
+{
+  if (re >= ROTDEC_MAX_COUNT) return;
+  _encoder[re] = 0;
+  _lastValue = readInitialState();
+}
+*/
 
 uint8_t rotaryDecoder::readInitialState()
 {
@@ -83,19 +91,25 @@ bool rotaryDecoder::update()
     return false;
   }
 
- _lastValue = value;
+  _lastValue = value;
   for (uint8_t i = 0; i < _count; i++, value >>= 2)
   {
     uint8_t currentPos = (value & 0x03);
     uint8_t change = (_lastPos[i] << 2) | currentPos;
     switch (change)
     {
-      case 0b0001:  //  fall through..
+      case 0b0001:  //  fall through
       case 0b0111:
       case 0b1110:
       case 0b1000:
         _encoder[i]++;
         break;
+      //  case 0b0011:
+      //  case 0b0110:
+      //  case 0b1001:
+      //  case 0b1100:
+      //    _encoder[i] += ?;  //  +2 or -2 undecidable
+      //    break;
       case 0b0010:
       case 0b0100:
       case 0b1101:
@@ -117,14 +131,14 @@ bool rotaryDecoder::updateSingle()
     return false;
   }
 
- _lastValue = value;
+  _lastValue = value;
   for (uint8_t i = 0; i < _count; i++, value >>= 2)
   {
     uint8_t currentPos = (value & 0x03);
     uint8_t change = (_lastPos[i] << 2) | currentPos;
     switch (change)
     {
-      case 0b0001:  //  fall through..
+      case 0b0001:  //  fall through
       case 0b0111:
       case 0b1110:
       case 0b1000:
@@ -194,10 +208,10 @@ uint8_t rotaryDecoder::read8()
 }
 
 
-bool rotaryDecoder::write8(uint8_t bitmask)
+bool rotaryDecoder::write8(uint8_t bitMask)
 {
   _wire->beginTransmission(_address);
-  _wire->write(bitmask);
+  _wire->write(bitMask);
   return (_wire->endTransmission() == 0);
 }
 

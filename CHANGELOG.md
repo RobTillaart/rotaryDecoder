@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.4.2] - 2026-09-06
+- fix #18, update readme.md
+- improve rotaryDecoder_demo_interrupt.ino
+- prep reset(re)
+- minor edits
+
 ## [0.4.1] - 2026-01-08
 - update GitHub actions
 - minor edits

@@ -2,7 +2,7 @@
 //
 //    FILE: rotaryDecoder.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.4.1
+// VERSION: 0.4.2
 //    DATE: 2021-05-08
 // PURPOSE: Arduino library for a PCF8574 based rotary decoder
 //     URL: https://github.com/RobTillaart/rotaryDecoder
@@ -35,8 +35,8 @@ public:
   bool     checkChange();
 
   //  read and update the counters
-  bool     update();         //  assumes two directions   => +1 and -1
-  bool     updateSingle();   //  assumes single direction => + ++ +++
+  bool     update();         //  assumes two directions => +1 and -1
+  bool     updateSingle();   //  assumes one direction  => +1, +2, +3
 
   //  re = rotary encoder 0..3
   //  returns 0, false if re > 3.
@@ -48,7 +48,7 @@ public:
   uint8_t  read1(uint8_t pin);
   bool     write1(uint8_t pin, uint8_t value);
   uint8_t  read8();
-  bool     write8(uint8_t bitmask);
+  bool     write8(uint8_t bitMask);
 
 
   //  DEBUG

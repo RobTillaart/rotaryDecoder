@@ -6,7 +6,7 @@
 //
 // connect up to 4 rotary encoders to 1 PCF8574.
 //
-//  RotaryEncoder    PCF8574      UNO
+//  RotaryEncoder    PCF8574      UNO R3
 //  --------------------------------------
 //    pin A           pin 0
 //    pin B           pin 1
@@ -30,7 +30,15 @@ volatile bool flag = false;
 void moved()
 {
   //  one should not read the PPCF8574 in the interrupt routine.
-  flag = true;
+  //  adjust if mechanical rotary encoder gives e.g. 4 pulses per tick
+  const int IRQ_PULSES_PER_TICK = 1;
+  static int count = 0;
+  count++;
+  if (count == IRQ_PULSES_PER_TICK)
+  {
+    count = 0;
+    flag = true;
+  }
 }
 
 
