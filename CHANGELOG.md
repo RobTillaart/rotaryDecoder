@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fix #18, update readme.md
 - improve rotaryDecoder_demo_interrupt.ino
 - prepare reset(re)
+- reduce build-CI platforms.
 - minor edits
 
 ## [0.4.1] - 2026-01-08
