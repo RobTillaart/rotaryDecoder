@@ -21,10 +21,10 @@ rotaryDecoder::rotaryDecoder(const int8_t address, TwoWire *wire)
 }
 
 
-bool rotaryDecoder::begin(uint8_t count)
+bool rotaryDecoder::begin(uint8_t deviceCount)
 {
-  _count = count;
-  if (_count > ROTDEC_MAX_COUNT) _count = ROTDEC_MAX_COUNT;
+  _deviceCount = deviceCount;
+  if (_deviceCount > ROTDEC_MAX_COUNT) _deviceCount = ROTDEC_MAX_COUNT;
 
   if (! isConnected()) return false;
   return true;
@@ -40,34 +40,35 @@ bool rotaryDecoder::isConnected()
 
 uint8_t rotaryDecoder::getRECount()
 {
-  return _count;
+  return _deviceCount;
 }
 
 
 void rotaryDecoder::reset()
 {
-  for (int i = 0 ; i < ROTDEC_MAX_COUNT; i++)
+  for (int i = 0; i < ROTDEC_MAX_COUNT; i++)
   {
-    _lastPos[i] = 0;
     _encoder[i] = 0;
   }
-  _lastValue = 0;
+  //  update last positions.
+  _lastValue = readInitialState();
 }
 
-/*
+
 void rotaryDecoder::reset(uint8_t re)
 {
   if (re >= ROTDEC_MAX_COUNT) return;
   _encoder[re] = 0;
+  //  update last positions.
   _lastValue = readInitialState();
 }
-*/
+
 
 uint8_t rotaryDecoder::readInitialState()
 {
   uint8_t value = read8();
   _lastValue = value;
-  for (uint8_t i = 0; i < _count; i++)
+  for (uint8_t i = 0; i < _deviceCount; i++)
   {
     _lastPos[i] = value & 0x03;
     value >>= 2;
@@ -92,7 +93,7 @@ bool rotaryDecoder::update()
   }
 
   _lastValue = value;
-  for (uint8_t i = 0; i < _count; i++, value >>= 2)
+  for (uint8_t i = 0; i < _deviceCount; i++, value >>= 2)
   {
     uint8_t currentPos = (value & 0x03);
     uint8_t change = (_lastPos[i] << 2) | currentPos;
@@ -132,7 +133,7 @@ bool rotaryDecoder::updateSingle()
   }
 
   _lastValue = value;
-  for (uint8_t i = 0; i < _count; i++, value >>= 2)
+  for (uint8_t i = 0; i < _deviceCount; i++, value >>= 2)
   {
     uint8_t currentPos = (value & 0x03);
     uint8_t change = (_lastPos[i] << 2) | currentPos;
@@ -175,6 +176,37 @@ bool rotaryDecoder::setValue(uint8_t re, int32_t value)
   if (re >= ROTDEC_MAX_COUNT) return false;
   _encoder[re] = value;
   return true;
+}
+
+
+/////////////////////////////////////////////////////
+//
+//  CLICKS API 0.4.2 #18
+//
+int32_t rotaryDecoder::getClicks(uint8_t re)
+{
+  if (re >= ROTDEC_MAX_COUNT) return 0;
+  //  test if 1?
+  return _encoder[re] / _stepsPerClick[re];
+}
+
+bool rotaryDecoder::setClicks(uint8_t re, int32_t clicks)
+{
+  return setValue(re, clicks * _stepsPerClick[re]);
+}
+
+//  configure per channel.
+bool rotaryDecoder::setStepsPerClick(uint8_t re, uint8_t spc)
+{
+  if (re >= ROTDEC_MAX_COUNT) return false;
+  if (spc == 0) return false;
+  _stepsPerClick[re] = spc;
+}
+
+uint8_t rotaryDecoder::getStepsPerClick(uint8_t re)
+{
+  if (re >= ROTDEC_MAX_COUNT) return 0;
+  return _stepsPerClick[re];
 }
 
 

@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.4.2] - 2026-09-06
-- fix #18, update readme.md
+- fix #18,
+- add getClicks(), setClicks()
+- add setStepsPerClick(), getStepsPerClick()
+- add example rotaryDecoder_getClicks.ino
+- update readme.md
 - improve rotaryDecoder_demo_interrupt.ino
-- prepare reset(re)
+- fix internal state after reset()
+- add reset(re) to reset a single rotary encoder.
 - reduce build-CI platforms.
 - minor edits
 
