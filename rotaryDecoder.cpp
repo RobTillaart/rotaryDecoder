@@ -201,6 +201,7 @@ bool rotaryDecoder::setStepsPerClick(uint8_t re, uint8_t spc)
   if (re >= ROTDEC_MAX_COUNT) return false;
   if (spc == 0) return false;
   _stepsPerClick[re] = spc;
+  return true;
 }
 
 uint8_t rotaryDecoder::getStepsPerClick(uint8_t re)
