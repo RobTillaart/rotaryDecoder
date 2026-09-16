@@ -11,13 +11,13 @@
 
 # rotaryDecoder
 
-Arduino library for a PCF8574 based rotary decoder - supports 4 rotary encoders.
+Arduino library for a PCF8574 based rotary decoder - supports up to 4 rotary encoders.
 
 
 ## Description
 
-This library uses a PCF8574 to read the pulses of a rotary encoder.
-As a PCF8574 has 8 lines up to 4 rotary encoders can be read over I2C.
+This library uses a PCF8574 to read the pulses of one or more rotary encoders.
+As a PCF8574 has 8 IO lines up to 4 rotary encoders can be read over I2C.
 The PCF interrupt line can be used to detect changes in the position of the encoders.
 
 If less than 4 rotary encoders are connected one should use the lower bit lines as the 
@@ -64,6 +64,23 @@ See also Interrupts section below.
 - https://github.com/RobTillaart/PCF8575
 
 
+### Hardware
+
+```
+// connect up to 4 rotary encoders to 1 PCF8574.
+//
+//  RotaryEncoder    PCF8575      UNO R3
+//  --------------------------------------
+//    pin A           pin 0
+//    pin B           pin 1
+//    ....            ....     (up to 4 RE)
+//
+//                    SDA         A4
+//                    SCL         A5
+//
+```
+
+
 ## Interface
 
 ```cpp
@@ -106,8 +123,10 @@ It updates the internal counters of the rotary encoder.
 This will add +1, +2 or +3 as it assumes that the rotary encoder 
 only goes into a single direction.
 Typical use is for a RPM measurement.
-Note that the **getValue()** can go 3x as fast if you turn in the other direction.
+Note that the **getValue()** can go 3x as fast if you turn in the opposite direction.
 Returns false if there is no change since last read.
+
+Note: a mix of single direction and bidirectional is not expected to work.
 
 Note: **update()** also returns true if the device has made +2 or -2
 steps. As it is undecidable the internal counter is **not** changed.
@@ -145,6 +164,7 @@ Returns the configured steps per click (default 1).
 **Warning**
 
 The **write1(pin, value)** might alter the state of the rotary encoder pins.
+Think of effect on the INT(errupt) pin.
 So this functionality should be tested thoroughly for your application.
 Especially the **write1()** is **experimental**, feedback welcome.
 
@@ -168,6 +188,9 @@ input pins this is faster but need some bit masking.
 LEDs in one IO action. As said before the user must guard not to interfere with the
 rotary encoder pins.
 
+A typical use-case is to use the 4 lower pins for 4 rotary encoders,
+and the upper 4 for other IO.
+
 
 ### Debugging
 
@@ -187,6 +210,7 @@ Note that above 500 KHz the gain becomes less while reliability of signal decrea
 (500 KHz is about 3x faster than 100 KHz in practice.)
 As 400 KHz is a standard I2C clock speed it is the preferred one.
 
+Note Teensy 4.1 seems to support only some distinct speeds.
 
 |  I2C speed  |  time (us)  |  delta  |  %%   |  Notes  |
 |:-----------:|:-----------:|:-------:|:-----:|:--------|
@@ -197,11 +221,12 @@ As 400 KHz is a standard I2C clock speed it is the preferred one.
 |   500 KHz   |       84    |    11   |  12%  |
 |   600 KHz   |       79    |     5   |   6%  |
 |   700 KHz   |       73    |     6   |   8%  |
+|   800 KHz   |        -    |     -   |   -%  |
 
 
 At 400 KHz it can update 4 rotary encoders in ~100us. 
 At a 50% update percentage this implies a max of about 
-5000 **update()** calls per second in theory.
+5000++ **update()** calls per second in theory.
 **to be tested in practice**
 
 Note that a high speed drill goes up to 30000 RPM = 500 RPS = 2000 interrupts per second, 
@@ -227,7 +252,7 @@ one should use the greatest common divider of the ratios.
 Ultimo this can imply that the interrupt handler should set the flag every 
 interrupt to prevent missing ticks.
 
-Also if you want to be able to turning multiple rotary encoders simultaneously, 
+Also if you want to be able to turning multiple rotary encoders simultaneously,
 there is a (small) chance that two (or more) pulses share the same interrupt. 
 In a scenario with 2 rotary encoders, one could e.g. have only 7 interrupts instead of 8.
 To guarantee the capture of every change one has to set the pulses to tick ratio 
@@ -245,7 +270,7 @@ way to capture all changes.
 
 - update documentation
 - picture how to connect e.g two rotary encoders which pins to used
-- keep in sync with rotaryEncoder8 (PCF8575) class.
+- keep in sync with rotaryEncoder8 (PCF8575) library.
 
 #### Should
 

@@ -41,12 +41,12 @@ public:
   bool     updateSingle();   //  assumes one direction  => +1, +2, +3
 
   //  re = rotary encoder 0..3
-  //  returns 0, == false if re > 3.
+  //  returns 0 == false if re > 3.
   //  returns the step counter of the quadrature signals (Pins A and B).
   int32_t  getValue(uint8_t re);
   bool     setValue(uint8_t re, int32_t value = 0);
 
-  //  new in 0.4.2 (experimental)
+  //  Experimental
   //  returns the counter of mechanical clicks (detents).
   //          == step counter / stepPerClick.
   int32_t  getClicks(uint8_t re);
