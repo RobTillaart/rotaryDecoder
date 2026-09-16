@@ -27,7 +27,7 @@ public:
 
   uint8_t  getRECount();
   void     reset();            //  reset all counters.
-  void     reset(uint8_t re);  //  reset the specified counter
+  bool     reset(uint8_t re);  //  reset the specified counter
 
   uint8_t  readInitialState();
 

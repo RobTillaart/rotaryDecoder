@@ -55,12 +55,13 @@ void rotaryDecoder::reset()
 }
 
 
-void rotaryDecoder::reset(uint8_t re)
+bool rotaryDecoder::reset(uint8_t re)
 {
-  if (re >= ROTDEC_MAX_COUNT) return;
+  if (re >= ROTDEC_MAX_COUNT) return false;
   _encoder[re] = 0;
   //  update last positions.
   _lastValue = readInitialState();
+  return true;
 }
 
 
