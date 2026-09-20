@@ -28,6 +28,10 @@ public:
   uint8_t  getRECount();
   void     reset();            //  reset all counters.
   bool     reset(uint8_t re);  //  reset the specified counter
+  
+  //       0 = CW,   1 = CCW.
+  bool     setDirection(uint8_t re, uint8_t dir = 0);
+  uint8_t  getDirection(uint8_t re);
 
   uint8_t  readInitialState();
 
@@ -74,6 +78,7 @@ protected:
   uint8_t   _lastPos[ROTDEC_MAX_COUNT] = { 0, 0, 0, 0 };
   int32_t   _encoder[ROTDEC_MAX_COUNT] = { 0, 0, 0, 0 };
   uint8_t   _stepsPerClick[ROTDEC_MAX_COUNT] = { 1, 1, 1, 1 };
+  uint8_t   _direction[ROTDEC_MAX_COUNT] = { 0, 0, 0, 0 };
 
   uint8_t   _address;
   TwoWire * _wire;
