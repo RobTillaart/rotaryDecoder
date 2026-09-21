@@ -54,14 +54,33 @@ For non linear mapping, see e.g. - https://github.com/RobTillaart/multiMap
 See also Interrupts section below.
 
 
+### Pull up resistors
+
+To improve the quality of the pulses from the rotary encoder to the PCF8574
+one should add pull up resistors on all input lines.
+This includes the non-connected input lines to prevent interrupts due to noise.
+
+The INT (interrupt) line must have a 10 kOhm pull up resistor.
+
+The I2C lines SDA and SCL normally need pull up resistors. 
+Only if there are other devices on the same I2C bus, which already have a
+pull up connected, there is no need to add extra resistors.
+
+Typical values for pull ups for the input lines are 4.7 or 3.3 kOhm.
+In case of (very) long wires the value may even be as low as 1 kOhm.
+
+
 ### Related
 
-- https://github.com/RobTillaart/rotaryDecoder
-- https://github.com/RobTillaart/rotaryDecoderSwitch
-- https://github.com/RobTillaart/rotaryDecoder8
-- https://github.com/RobTillaart/rotaryDecoderSwitch5
-- https://github.com/RobTillaart/PCF8574
-- https://github.com/RobTillaart/PCF8575
+PCF based rotary decoders
+- https://github.com/RobTillaart/rotaryDecoder - up to four rotary encoders
+- https://github.com/RobTillaart/rotaryDecoderSwitch - up to two rotary encoders with switch
+- https://github.com/RobTillaart/rotaryDecoder8 - up to eight rotary encoders
+- https://github.com/RobTillaart/rotaryDecoderSwitch5 - up to five rotary encoders with switch
+
+Supporting devices
+- https://github.com/RobTillaart/PCF8574 - 8 pin IO extender
+- https://github.com/RobTillaart/PCF8575 - 16 pin IO extender
 
 
 ### Hardware
@@ -102,6 +121,18 @@ Reads the device to update the last state.
 - **bool reset(uint8_t re)** reset one rotary encoder counter to 0.
 Reads the device to update the last state.
 If re is out of range, false is returned, nothing is changed.
+
+
+### Direction
+
+Not all rotary encoders are created equal, the direction they use as 
+"increase / positive" may differ.
+Since 0.4.3 the library supports changing the "count" direction.
+
+- **bool setDirection(uint8_t re, uint8_t dir = 0)** dir = 0 is default.
+- **uint8_t getDirection(uint8_t re)**
+
+Note: if one changes the direction there is no reset of the count.
 
 
 ### Core functions

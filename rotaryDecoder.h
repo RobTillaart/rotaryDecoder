@@ -2,7 +2,7 @@
 //
 //    FILE: rotaryDecoder.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.4.2
+// VERSION: 0.4.3
 //    DATE: 2021-05-08
 // PURPOSE: Arduino library for a PCF8574 based rotary decoder
 //     URL: https://github.com/RobTillaart/rotaryDecoder
@@ -11,7 +11,7 @@
 #include "Arduino.h"
 #include "Wire.h"
 
-#define ROTARY_DECODER_LIB_VERSION         (F("0.4.2"))
+#define ROTARY_DECODER_LIB_VERSION         (F("0.4.3"))
 
 const uint8_t ROTDEC_MAX_COUNT = 4;
 
@@ -29,7 +29,7 @@ public:
   void     reset();            //  reset all counters.
   bool     reset(uint8_t re);  //  reset the specified counter
   
-  //       0 = CW,   1 = CCW.
+  //       0 = CW, other = CCW, setDirection does not reset the counter!
   bool     setDirection(uint8_t re, uint8_t dir = 0);
   uint8_t  getDirection(uint8_t re);
 

@@ -1,7 +1,7 @@
 //
 //    FILE: rotaryDecoder.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.4.2
+// VERSION: 0.4.3
 //    DATE: 2021-05-08
 // PURPOSE: Arduino library for a PCF8574 based rotary decoder
 //     URL: https://github.com/RobTillaart/rotaryDecoder
@@ -64,7 +64,7 @@ bool rotaryDecoder::reset(uint8_t re)
   return true;
 }
 
-//  DIRECTION 
+//  DIRECTION
 bool rotaryDecoder::setDirection(uint8_t re, uint8_t dir)
 {
   if (re >= ROTDEC_MAX_COUNT) return false;
