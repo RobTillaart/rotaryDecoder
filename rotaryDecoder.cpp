@@ -84,7 +84,7 @@ uint8_t rotaryDecoder::readInitialState()
 {
   uint8_t value = read8();
   _lastValue = value;
-  for (uint8_t i = 0; i < _deviceCount; i++)
+  for (uint8_t i = 0; i < ROTDEC_MAX_COUNT; i++)
   {
     _lastPos[i] = value & 0x03;
     value >>= 2;

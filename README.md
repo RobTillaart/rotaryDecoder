@@ -20,11 +20,14 @@ This library uses a PCF8574 to read the pulses of one or more rotary encoders.
 As a PCF8574 has 8 IO lines up to 4 rotary encoders can be read over I2C.
 The PCF interrupt line can be used to detect changes in the position of the encoders.
 
-If less than 4 rotary encoders are connected one should use the lower bit lines as the 
-library assumes these are used. Furthermore it is advised to connect the free PCF8574
+If less than 4 rotary encoders are connected one must use the lower bit lines as the 
+library assumes these are used. 
+If you want to use less than 4, but want to be free to choose which set of PCF8574 pins, 
+you must configure 4 devices, and use e.g. re = 1 and re = 3.
+Furthermore it is advised to connect the free PCF8574
 pins to GND so you will not get unintended interrupts.
 
-Note: This library works (limited) with the PCF8575.
+Note: This library works (limited) with the PCF8575 (lower half).
 
 As always, feedback is welcome.
 
@@ -132,7 +135,8 @@ Since 0.4.3 the library supports changing the "count" direction.
 - **bool setDirection(uint8_t re, uint8_t dir = 0)** dir = 0 is default.
 - **uint8_t getDirection(uint8_t re)**
 
-Note: if one changes the direction there is no reset of the count.
+Note: if one changes the direction there is no reset of the internal counter.
+The user needs to call **reset(re)** manually to start with zero again.
 
 
 ### Core functions
@@ -305,15 +309,20 @@ way to capture all changes.
 
 #### Should
 
-- test with a high speed drill like a Dremel-tool.
-- should we test against ROTDEC_MAX_COUNT or deviceCount?
-  - used devices are 0..deviceCount-1, so deviceCount is better.
-  - need evaluation per function?
 
 #### Could
 
 - enable flag per rotary encoder?
-  - allows to lock one programmatically.
+  - allows to lock one programmatically. (skip update)
+  - needs additional array for locks (4 bytes?)
+  - add void setLock(uint8_t re, bool lock);
+  - add bool getLock(uint8_t re);
+  - won't prevent IRQ's
+- as direction is one bit this might be optimized
+  - bit mask, save 3 bytes
+  - but slightly slower code
+- test with a high speed drill like a Dremel-tool.
+
 
 #### Wont
 
@@ -324,11 +333,9 @@ way to capture all changes.
   - conditional switch?
   - even more important for the PCF8575 based one?
   - ==> simple test shows minimal gain.
-- invert flag to adjust to rotary encoder that give their pulse just the other way around?
-  - **bool setInvert(re, bool)** change per channel.
-  - **bool getInvert(re)**
-  - effectively return minus value
-  - user can do this negation very easily
+- should we test against ROTDEC_MAX_COUNT or deviceCount?
+  - used devices are 0..deviceCount-1, so deviceCount is better.
+  - need evaluation per function? (done, now it is robust).
 
 
 ## Support
