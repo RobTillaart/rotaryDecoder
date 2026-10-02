@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add bool setDirection(uint8_t re, uint8_t dir = 0)
 - add uint8_t getDirection(uint8_t re)
 - add section about pull up resistors.
+- fix frameworks in library.json
 - minor edits
 
 ## [0.4.2] - 2026-09-06
