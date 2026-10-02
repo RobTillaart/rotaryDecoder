@@ -22,7 +22,7 @@ The PCF interrupt line can be used to detect changes in the position of the enco
 
 If less than 4 rotary encoders are connected one must use the lower bit lines as the 
 library assumes these are used. 
-If you want to use less than 4, but want to be free to choose which set of PCF8574 pins, 
+If you want to use less than 4, and want to be free to choose which set of PCF8574 pins, 
 you must configure 4 devices, and use e.g. re = 1 and re = 3.
 Furthermore it is advised to connect the free PCF8574
 pins to GND so you will not get unintended interrupts.
@@ -115,8 +115,8 @@ Supporting devices
 constructor to set the address and optional the Wire bus.
 - **bool begin(uint8_t deviceCount = 4)** UNO ea. initializes the class. 
 deviceCount is the number of rotary encoders connected. (Max 4 per PCF8574)
-Returns true if the PCF8574 is on the I2C bus.
-- **bool isConnected()** returns true if the PCF8574 is on the I2C bus.
+Returns true if the PCF8574 address is found on the I2C bus.
+- **bool isConnected()** returns true if the PCF8574 address is found on the I2C bus.
 - **uint8_t getRECount()** returns number of rotary encoders from begin(), 
 convenience e.g. for for loops.
 - **void reset()** reset all internal counters to 0.
