@@ -309,6 +309,8 @@ way to capture all changes.
 
 #### Should
 
+- add setStepSize(int16_t ss);
+  - allows step size up to ±32767  (e.g. jump from Hz to kHz)
 
 #### Could
 
