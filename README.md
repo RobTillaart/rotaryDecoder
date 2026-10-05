@@ -309,11 +309,15 @@ way to capture all changes.
 
 #### Should
 
-- add setStepSize(int16_t ss);
-  - allows step size up to ±32767  (e.g. jump from Hz to kHz)
+- investigate dynamic memory instead of fixed arrays
+  - goal reduce RAM usage
+  - footprint?
 
 #### Could
 
+- investigate setStepSize(uint8_t re, int16_t stepSize);
+  - allows step size up to ±32767  (e.g. jump from Hz to kHz)
+  - negative stepSize changes direction!
 - enable flag per rotary encoder?
   - allows to lock one programmatically. (skip update)
   - needs additional array for locks (4 bytes?)
