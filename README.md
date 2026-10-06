@@ -138,6 +138,9 @@ Since 0.4.3 the library supports changing the "count" direction.
 Note: if one changes the direction there is no reset of the internal counter.
 The user needs to call **reset(re)** manually to start with zero again.
 
+Note: If one wants a permanent swapping of the direction one can swap
+the A and B lines of the rotary encoder.
+
 
 ### Core functions
 
